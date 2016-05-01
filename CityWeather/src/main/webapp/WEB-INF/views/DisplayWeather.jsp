@@ -11,25 +11,43 @@
 </style>
 <script>
 var cel=0;
-var callbackFunction = function(data)
-{
-    var location = data.query.results.channel.location;
-    var atmosphere = data.query.results.channel.atmosphere;
-    var wind = data.query.results.channel.wind;
-    var item = data.query.results.channel.item;
-    cel=item.condition.temp;
-    cel=Math.floor((cel-32)*(5/9));
-    $(document).ready(function() 
-    {
-    	$("#Location").html(location.country);
-    	$("#city_city").html(location.city);
-    	$("#CurrentTemperature").html(cel+" &#8451");
-    	$("#currentDate").html(item.condition.date);
-    	$("#sky").html(item.condition.text);
-   });
-};
+	var callbackFunction = function(data){
+		var location = data.query.results.channel.location;
+		var atmosphere = data.query.results.channel.atmosphere;
+		var wind = data.query.results.channel.wind;
+		var item = data.query.results.channel.item;
+		cel=item.condition.temp;
+		cel=Math.floor((cel-32)*(5/9));
+		$("#Location").html(location.country);
+		$("#city_city").html(location.city);
+		$("#CurrentTemperature").html(cel+" &#8451");
+		$("#currentDate").html(item.condition.date);
+		$("#sky").html(item.condition.text);
+	}
+
+
+   $(document).ready(function(){
+		fnGetWeather();		
+	
+    	
+    }); 
+
+	function fnClean(){
+			$("#Location").html("");
+			$("#city_city").html("");
+			$("#CurrentTemperature").html("");
+			$("#currentDate").html("");
+			$("#sky").html("");
+			cel=0;
+	}
+
+	function fnGetWeather(){
+		var now = new Date();
+		var rnd=now.getFullYear()+now.getMonth()+now.getDay()+now.getHours(); 
+		var url= "https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text='"+$("#selectCity").val()+"')&rnd='"+rnd+"'&format=json&callback=?";
+        $.getJSON( url,callbackFunction );
+	}
 </script>
-<script src="https://query.yahooapis.com/v1/public/yql?q=select * from weather.forecast where woeid in (select woeid from geo.places(1) where text=+'${city1.city}'+)&format=json&callback=callbackFunction"></script>
 <body id="demo">
 <form:form action="weather" method="post" commandName="cb">
  <form:errors path="*" element="div" cssClass="commonerrorblock"/>
@@ -39,7 +57,7 @@ var callbackFunction = function(data)
 	  	<tr>
     		<td width="50%">Select City</td>
       		<td width="50%"><center>
-    			<form:select path="city" id="selectCity">
+    			<form:select path="city" id="selectCity" onchange="fnClean();">
  					<form:options items="${cityList}"/>
  				</form:select>
  				</center> 
@@ -48,10 +66,9 @@ var callbackFunction = function(data)
   		<tr>
     		<td width="50%"  colspan="2">
     		<center>
-    			<form:input path="*" type="submit" value="Get Weather Details" style="cursor:pointer;" title="Click for getting you city weather"/>
+    			<form:input type="button" path="*" value="Get Weather" style="cursor:pointer;" onclick="fnGetWeather();" title="Click for getting you city weather"/>
     		</center>
     		</td>
-  			
   		</tr>
     </table>
     </center>
