@@ -23,6 +23,7 @@ var cel=0;
 		$("#CurrentTemperature").html(cel+" &#8451");
 		$("#currentDate").html(item.condition.date);
 		$("#sky").html(item.condition.text);
+		$("#Wind").html(wind.speed+" Km/h");
 	}
 
 
@@ -38,6 +39,7 @@ var cel=0;
 			$("#CurrentTemperature").html("");
 			$("#currentDate").html("");
 			$("#sky").html("");
+			$("#Wind").html("");
 			cel=0;
 	}
 
@@ -57,7 +59,7 @@ var cel=0;
 	  	<tr>
     		<td width="50%">Select City</td>
       		<td width="50%"><center>
-    			<form:select path="city" id="selectCity" onchange="fnClean();">
+    			<form:select path="city" id="selectCity" onchange="fnClean();fnGetWeather();">
  					<form:options items="${cityList}"/>
  				</form:select>
  				</center> 
@@ -65,9 +67,9 @@ var cel=0;
     	</tr>
   		<tr>
     		<td width="50%"  colspan="2">
-    		<center>
+    		<!-- <center>
     			<form:input type="button" path="*" value="Get Weather" style="cursor:pointer;" onclick="fnGetWeather();" title="Click for getting you city weather"/>
-    		</center>
+    		</center> -->
     		</td>
   		</tr>
     </table>
@@ -83,18 +85,23 @@ var cel=0;
     		<td width="50%">City</td>
     		<td width="50%" id="city_city"></td> 
   		</tr>
+  		 <tr>
+    		<td width="50%">Updated Time</td>
+    		<td width="50%" id="currentDate"></td> 
+  		</tr>
+  		 <tr>
+    		<td width="50%">Weather</td>
+    		<td width="50%" id="sky"></td> 
+  		</tr>
   		<tr>
     		<td width="50%">Current Temperature</td>
     		<td width="50%" id="CurrentTemperature"></td> 
   		</tr>
-  		 <tr>
-    		<td width="50%">CurrentDate</td>
-    		<td width="50%" id="currentDate"></td> 
+  		<tr>
+    		<td width="50%">Wind</td>
+    		<td width="50%" id="Wind"></td> 
   		</tr>
-  		 <tr>
-    		<td width="50%">Sky</td>
-    		<td width="50%" id="sky"></td> 
-  		</tr>
+
 	</table>
 	</center>
 </body>
